@@ -46,7 +46,7 @@ namespace aerosols
 #define b 0.441
 #define c -0.779
 #endif
-#ifdef _Hutchins_ //Rader 1995 PSL
+#ifdef _Hutchins_ //Hutchins 1995 PSL
 #define a 1.231
 #define b 0.469
 #define c -1.178
