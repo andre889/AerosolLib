@@ -201,4 +201,43 @@ namespace aerosols
 		return D;
 	}
 	
+	template <class T>
+	T getKnD(T temp, T size1, T size2, T mij, T fij)
+	{
+		return sqrt(constants::K * temp * mij) / fij / (size1 + size2) / 2.0;
+	}
+
+	//return diffusive knudsen number
+	template <class T>
+	T getKnD(T temp, T size1, T size2, T mass1, T mass2,T mu, T mfp)
+	{
+		T mij = mass1 * mass2 / (mass1 + mass2);
+		T fi = getff(size1, mu, mfp);
+		T fj = getff(size2, mu, mfp);
+		T fij = fi * fj / (fi + fj);
+
+		return getKnD(temp,size1,size2,mij,fij);
+	}
+
+	// https://doi.org/10.1080/02786826.2011.601775
+	//Determination of the Transition Regime Collision
+	//Kernel from Mean First Passage Times
+	//Ranganathan Gopalakrishnan & Christopher J. Hogan Jr
+	template <class T>
+	T calcH_KnD(T& KnD)
+	{
+		return (4.0 * constants::PI * pow(KnD, 2) + 25.836 * pow(KnD, 3) + sqrt(8 * constants::PI) * 11.211 * pow(KnD, 4)) / (1.0 + 3.502 * KnD + 7.211 * pow(KnD, 2) + 11.211 * pow(KnD, 3));
+	}
+
+	// https://doi.org/10.1080/02786826.2011.601775
+	//Determination of the Transition Regime Collision
+	//Kernel from Mean First Passage Times
+	//Ranganathan Gopalakrishnan & Christopher J. Hogan Jr
+	template <class T>
+	T calcBetafromH(T H, T fij, T dp1, T dp2, T mij)
+	{
+		return H * fij * pow((dp1+dp2)/2.0, 3) / mij;
+	}
+	
+	
 };
